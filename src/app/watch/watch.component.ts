@@ -1,7 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { timer, interval, Observable } from 'rxjs';
-import { map, bufferTime, filter, finalize, debounceTime, timeout, skipWhile, take, repeat, retry, buffer, mapTo, distinctUntilChanged } from 'rxjs/operators';
-
+import { Component, OnInit, ViewChild,ElementRef } from '@angular/core';
+import { timer, interval, Observable, fromEvent } from 'rxjs';
 
 @Component({
   selector: 'app-watch',
@@ -15,9 +13,20 @@ export class WatchComponent implements OnInit {
   stopFlag = true;
   timer : any;
   data: number = 0;
-  public dblcount: any = 0;
-  public snglcount: any = 0;
-  public message:string="Waiting for a click...";
+  buttonTimeout = 0;
+  
+
+  doubleFunction() {
+    this.buttonTimeout++;
+    setTimeout(() => {
+      if (this.buttonTimeout === 2){
+        this.stopFlag = true
+        this.timer.unsubscribe(); 
+      }
+      this.buttonTimeout = 0;
+    }, 250)
+    console.log(this.buttonTimeout)
+  }
 
   startStopClick() {
     if (this.stopFlag === true) { 
@@ -56,5 +65,6 @@ export class WatchComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    
   }
 }
